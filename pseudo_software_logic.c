@@ -46,7 +46,7 @@ vec serv_inner_product(vec c1, vec c2, mat M, int w)
 
 // call server side polynomial operation
 // returns M, the key switch matrix from vec(S^t S) to S
-mat cli_polynomial(mat &T, mat &c, int w)
+mat cli_polynomial(mat &T, mat &c1, mat &c2, int w)
 {
 	mat S = getSecretKey(T); // get secret key
 	mat Sp = extend(S);		 // extend secret key with constant 1
@@ -56,9 +56,9 @@ mat cli_polynomial(mat &T, mat &c, int w)
 }
 
 // given ciphertext and the keyswitch matrix, computes an inner product
-vec serv_polynomial(vec c, mat &M, int w)
+vec serv_polynomial(mat &c1, mat &c2, mat &M, int w)
 {
-	vec cc = vectorize(c * transpose(c));
+	vec cc = vectorize(c1 * transpose(c2));
 	vec n = syscall.nearestInteger(cc, w);
 	return M * syscall.bit_repr_cector(n);
 }
